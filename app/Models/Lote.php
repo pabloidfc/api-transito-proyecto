@@ -25,4 +25,8 @@ class Lote extends Model
         return $this->belongsToMany(Vehiculo::class, 'vehiculo_transporta', 'lote_id', 'vehiculo_id')
         ->withPivot(['orden', 'estado_viaje', 'salida_programada']);
     }
+
+    public function ViajeAsignado() {
+        return $this -> belongsToMany(ViajeAsignado::class, "lote_id", "viaje_id");
+    }
 }

@@ -3,7 +3,8 @@
 use App\Http\Controllers\TransportistaController;
 use App\Http\Controllers\VehiculoController;
 use App\Http\Controllers\VehiculoTransportaController;
-use App\Http\Controllers\Ruta;
+use App\Http\Controllers\RutaController;
+use App\Http\Controllers\ViajeController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -43,7 +44,13 @@ Route::controller(VehiculoTransportaController::class) -> group(function () {
     Route::get("/vehiculoTransporta/{id}", "ListarPorVehiculo");
 });
 
-Route::controller(Ruta::class) -> group(function () {
+Route::controller(RutaController::class) -> group(function () {
     Route::get("/ruta", "Listar");
     Route::get("/ruta/{id}", "ListarUno");
+});
+
+Route::controller(ViajeController::class) -> group(function () {
+    Route::get("/viaje", "Listar");
+    Route::get("/viaje/{id}", "ListarUno");
+    Route::get("/viaje/{id}/viajeAsignado", "ListarUnoViajeAsignado");
 });
