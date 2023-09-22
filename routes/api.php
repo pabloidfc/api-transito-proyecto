@@ -50,6 +50,7 @@ Route::controller(RutaController::class) -> group(function () {
 });
 
 Route::controller(ViajeController::class) -> group(function () {
+    Route::post("/viaje", "Crear");
     Route::get("/viaje", "Listar");
     Route::get("/viaje/{id}", "ListarUno");
     Route::get("/viaje/{id}/viajeAsignado", "ListarUnoViajeAsignado");

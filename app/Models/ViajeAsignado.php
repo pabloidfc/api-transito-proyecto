@@ -11,6 +11,15 @@ class ViajeAsignado extends Model
     use HasFactory;
     use SoftDeletes;
 
+    protected $table = "viaje_asignado"; 
+    protected $fillable = [
+        "viaje_id",
+        "lote_id",
+        "vehiculo_id",
+        "llegada_almacen",
+        "salida_almacen"
+    ]; 
+
     public function Viaje() {
         return $this->belongsTo(Viaje::class, 'viaje_id');
     }

@@ -36,7 +36,7 @@ class VehiculoTransportaController extends Controller
     public function ModificarEstado(Request $req) {
         $validaciones = Validator::make($req->all(), [
             "vehiculo_id"       => ["required", "integer", Rule::exists('vehiculo', 'id')],
-            "salida_programada" => "required|date",
+            "salida_programada" => "required|date|date_format:Y-m-d H:i:s",
             "estado_viaje"      => "required|in:No iniciado,En curso,Finalizado"
         ]);
 
