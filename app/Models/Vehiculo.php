@@ -16,4 +16,9 @@ class Vehiculo extends Model
     public function Transportistas() {
         return $this -> hasMany(Transportista::class);
     }
+
+    public function Lotes() {
+        return $this->belongsToMany(Lote::class, 'vehiculo_transporta', 'vehiculo_id', 'lote_id')
+        ->withPivot(['orden', 'estado_viaje', 'salida_programada']);
+    }
 }

@@ -43,9 +43,9 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    // public function Lotes() {
-    //     return $this -> hasMany(Lote::class);
-    // }
+    public function Lotes() {
+        return $this -> hasMany(Lote::class);
+    }
 
     public function Ubicacion() {
         return $this -> hasOne(Ubicacion::class);

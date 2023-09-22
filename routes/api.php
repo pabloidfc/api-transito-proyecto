@@ -30,4 +30,5 @@ Route::controller(VehiculoController::class) -> group(function () {
     Route::get("/vehiculo", "Listar");
     Route::get("/vehiculo/{id}", "ListarUno");
     Route::get("/vehiculo/{id}/transportistas", "ListarTransportistaVehiculo");
+    Route::post("/vehiculo/lotes", "CrearVehiculoTransporta");
 });
