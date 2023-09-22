@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Vehiculo;
 use App\Models\Lote;
+use App\Models\Transportista;
 use App\Models\VehiculoTransporta;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -59,5 +60,23 @@ class VehiculoController extends Controller
         $vehiculoTransportaInstances[] = $vehiculoTransporta;
 
         return $vehiculoTransporta;
+    }
+
+    public function AsignarTransportistas(Request $req, $idVehiculo) {
+        $vehiculo = Vehiculo::findOrFail($idVehiculo);
+        $validaciones = Validator::make($req->all(), [
+            "idsTransportistas" => "required|array",
+            "idsTransportistas.*" => "exists:transportista,user_id",
+        ]);
+
+        if ($validaciones->fails())
+            return response($validaciones->errors(), 400);
+
+        $idsTransportistas = $req -> input("idsTransportistas", []);
+        $transportistas = Transportista::whereIn("user_id", $idsTransportistas)->get();
+        $vehiculo->Transportistas()->saveMany($transportistas);
+        $vehiculo->Transportistas;
+
+        return $vehiculo;
     }
 }
