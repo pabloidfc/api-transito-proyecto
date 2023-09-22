@@ -3,6 +3,7 @@
 use App\Http\Controllers\TransportistaController;
 use App\Http\Controllers\VehiculoController;
 use App\Http\Controllers\VehiculoTransportaController;
+use App\Http\Controllers\Ruta;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -40,4 +41,9 @@ Route::controller(VehiculoTransportaController::class) -> group(function () {
     Route::get("/vehiculoTransporta/estado", "ListarPorEstado");
     Route::put("/vehiculoTransporta/estado", "ModificarEstado");
     Route::get("/vehiculoTransporta/{id}", "ListarPorVehiculo");
+});
+
+Route::controller(Ruta::class) -> group(function () {
+    Route::get("/ruta", "Listar");
+    Route::get("/ruta/{id}", "ListarUno");
 });
