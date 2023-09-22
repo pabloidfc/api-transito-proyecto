@@ -28,9 +28,9 @@ class VehiculoController extends Controller
 
     public function CrearVehiculoTransporta(Request $req) {
         $validaciones = Validator::make($req->all(), [
-            "vehiculo_id" => ["required", "integer", Rule::exists('vehiculo', 'id')],
-            "idsLotes"    => "required|array", 
-            "idsLotes.*"  => "exists:lote,id",
+            "vehiculo_id"       => ["required", "integer", Rule::exists('vehiculo', 'id')],
+            "idsLotes"          => "required|array", 
+            "idsLotes.*"        => "exists:lote,id",
             "salida_programada" => "required|date",
         ]);
 
@@ -45,16 +45,16 @@ class VehiculoController extends Controller
         $orden = 1;
         foreach ($lotes as $lote) {
             $vehiculo->Lotes()->attach($lote->id, [
-                'orden' => $orden,
+                'orden'             => $orden,
                 'salida_programada' => $req->salida_programada,
-                'created_at' => now(),
-                'updated_at' => now()
+                'created_at'        => now(),
+                'updated_at'        => now()
             ]);
             $orden++;
         }
 
         $vehiculoTransporta = VehiculoTransporta::where('vehiculo_id', $vehiculo->id)
-            ->first();
+            -> first();
 
         $vehiculoTransportaInstances[] = $vehiculoTransporta;
 
