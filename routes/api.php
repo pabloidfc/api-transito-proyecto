@@ -31,6 +31,8 @@ Route::controller(TransportistaController::class) -> group(function () {
 
 Route::controller(VehiculoController::class) -> group(function () {
     Route::get("/vehiculo", "Listar");
+    Route::get("/vehiculo/estado", "ListarPorEstado");
+    Route::put("/vehiculo/estado", "ModificarEstado");
     Route::get("/vehiculo/{id}", "ListarUno");
     Route::get("/vehiculo/{id}/transportistas", "ListarVehiculoTransportistas");
     Route::post("/vehiculo/{id}/transportistas", "AsignarTransportistas");

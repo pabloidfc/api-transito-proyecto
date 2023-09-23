@@ -21,6 +21,37 @@ class VehiculoController extends Controller
         return $vehiculo;
     }
 
+    public function ListarPorEstado(Request $req) {
+        $opciones = [
+            "Disponible"    => "Disponible",
+            "No disponible" => "No disponible",
+            "En reparación" => "En reparación"
+        ];
+
+        if (isset($opciones[$req->estado])) {
+            $vehiculo = Vehiculo::where("estado", "=", $req->estado) -> get();
+            return $vehiculo;
+        }
+
+        return response(["msg" => "El estado no existe!"], 400);
+    }
+
+    public function ModificarEstado(Request $req) {
+        $validaciones = Validator::make($req->all(), [
+            "vehiculo_id" => ["required", "integer", Rule::exists('vehiculo', 'id')],
+            "estado" => "required|in:Disponible,No disponible,En reparación"
+        ]);
+
+        if($validaciones->fails()) 
+            return response($validaciones->errors(), 400);
+
+        $vehiculo = Vehiculo::find($req -> vehiculo_id);
+        $vehiculo -> estado = $req -> estado;
+        $vehiculo -> save();
+
+        return $vehiculo;
+    }
+
     public function ListarVehiculoTransportistas(Request $req, $idVehiculo) {
         $vehiculo = Vehiculo::findOrFail($idVehiculo);
         $vehiculo->Transportistas;
