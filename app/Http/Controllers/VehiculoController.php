@@ -32,7 +32,7 @@ class VehiculoController extends Controller
             "vehiculo_id"       => ["required", "integer", Rule::exists('vehiculo', 'id')],
             "idsLotes"          => "required|array", 
             "idsLotes.*"        => "exists:lote,id",
-            "salida_programada" => "required|date",
+            "salida_programada" => "required|date|date_format:Y-m-d H:i:s",
         ]);
 
         if ($validaciones->fails())
@@ -54,10 +54,7 @@ class VehiculoController extends Controller
             $orden++;
         }
 
-        $vehiculoTransporta = VehiculoTransporta::where('vehiculo_id', $vehiculo->id)
-            -> first();
-
-        $vehiculoTransportaInstances[] = $vehiculoTransporta;
+        $vehiculoTransporta = VehiculoTransporta::whereIn('vehiculo_id', $vehiculo->id);
 
         return $vehiculoTransporta;
     }
