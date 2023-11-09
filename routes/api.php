@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ProductoController;
 use App\Http\Controllers\TransportistaController;
 use App\Http\Controllers\VehiculoController;
 use App\Http\Controllers\VehiculoTransportaController;
@@ -21,6 +22,10 @@ use Illuminate\Support\Facades\Route;
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
+});
+
+Route::controller(ProductoController::class) -> group(function () {
+    Route::get("/guest/producto/{id}", "GuestListarUno");
 });
 
 Route::controller(TransportistaController::class) -> group(function () {
