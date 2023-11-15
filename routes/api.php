@@ -28,6 +28,10 @@ Route::controller(ProductoController::class) -> group(function () {
     Route::get("/guest/producto/{id}", "GuestListarUno");
 });
 
+Route::middleware("validarApiToken") -> group(function () {
+    
+});
+
 Route::controller(TransportistaController::class) -> group(function () {
     Route::get("/transportista", "Listar");
     Route::get("/transportista/{id}", "ListarUno");
