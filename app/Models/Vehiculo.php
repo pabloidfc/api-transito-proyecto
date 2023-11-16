@@ -25,4 +25,8 @@ class Vehiculo extends Model
     public function ViajeAsignado() {
         return $this -> belongsToMany(ViajeAsignado::class, "vehiculo_id", "viaje_id");
     }
+
+    public function VehiculoTransporta() {
+        return $this -> belongsToMany(VehiculoTransporta::class, "vehiculo_id");
+    }
 }

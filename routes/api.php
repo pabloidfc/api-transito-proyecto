@@ -1,9 +1,7 @@
 <?php
 
-use App\Http\Controllers\TransportistaController;
-use App\Http\Controllers\VehiculoController;
-use App\Http\Controllers\VehiculoTransportaController;
-use App\Http\Controllers\RutaController;
+
+use App\Http\Controllers\UsuarioController;
 use App\Http\Controllers\ViajeController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -21,6 +19,22 @@ use Illuminate\Support\Facades\Route;
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
+});
+
+Route::controller(ProductoController::class) -> group(function () {
+    Route::get("/guest/producto/{id}", "GuestListarUno");
+});
+
+Route::group(["middleware" => ["validarApiToken", "transportista"]], function () {
+    Route::controller(UsuarioController::class) -> group(function () {
+        Route::get("/usuario/token", "ListarUsuario");
+    });
+    
+    Route::controller(ViajeController::class) -> group(function () {
+        Route::get("/vehiculo/asignado", "VehiculoAsignado");
+        Route::get("/viaje/asignado", "ViajeAsignado");
+        Route::get("/viaje/iniciar", "IniciarViaje");
+    });
 });
 
 Route::controller(TransportistaController::class) -> group(function () {

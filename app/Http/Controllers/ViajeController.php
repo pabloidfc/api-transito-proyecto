@@ -3,68 +3,69 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Viaje;
+use App\Models\User;
+use App\Models\Transportista;
+use App\Models\Vehiculo;
 use App\Models\VehiculoTransporta;
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Validation\Rule;
+use App\Models\ViajeAsignado;
+use App\Models\Viaje;
+use Carbon\Carbon;
 
 class ViajeController extends Controller
 {
-    public function Listar() {
-      return Viaje::all();
+    public function VehiculoAsignado(Request $req) {
+        $transportista_id = $req->attributes->get("transportista_id");
+        $transportista = Transportista::find($transportista_id);
+        
+        if($transportista->vehiculo_id == null) return response(["msg" => "No tienes vehiculo asignado"], 400);
+        $transportista->Vehiculo;
+        return $transportista;
+    }
+    
+    public function ViajeAsignado(Request $req) {
+        $transportista_id = $req->attributes->get("transportista_id");
+        $transportista = Transportista::find($transportista_id);
+        $transporta = VehiculoTransporta::where("vehiculo_id", $transportista->vehiculo_id)->get();
+        
+        if(!$transporta) return response(["msg" => "No tienes viajes asignados"], 400);
+        return response($transporta);
+    }
+    
+    public function IniciarViaje(Request $req) {
+        $transportista_id = $req->attributes->get("transportista_id");
+        $transportista = Transportista::find($transportista_id);
+
+        $transporta = VehiculoTransporta::where("vehiculo_id", $transportista->vehiculo_id)->get();
+        $asignado = ViajeAsignado::where("vehiculo_id", $transportista->vehiculo_id)->get();
+        $asignado_id = ViajeAsignado::where("vehiculo_id", $transportista->vehiculo_id)->first();
+        $viaje = Viaje::where("id", $asignado_id->viaje_id)->first();
+
+        $this->ModificarVehiculoTransporta($transporta);
+        $this->FechaSalidaViaje($viaje);
+
+        return response([
+            "transporta" => $transporta,
+            "viaje" => $viaje,
+            "asignado" => $asignado,
+        ]);
     }
 
-    public function ListarUno($idViaje) {
-        $viaje = Viaje::findOrFail($idViaje);
-        return $viaje;
-    } 
-
-    public function ListarUnoViajeAsignado($idViaje) {
-        $viaje = Viaje::findOrFail($idViaje);
-        $viaje -> ViajeAsignado;
-        return $viaje;
-    } 
-
-    public function Crear(Request $req) {
-        $validaciones = Validator::make($req->all(), [
-            "ruta_id"     => "required|integer|exists:ruta,id",
-            "vehiculo_id" => "required|integer|exists:vehiculo,id",
-            "idsLotes"    => "required|array", 
-            "idsLotes.*"  => "exists:lote,id",
-            "salida"      => "nullable|date|date_format:Y-m-d H:i:s"
-        ]);
-
-        $validaciones->after(function ($validator) use ($req) {
-            $idVehiculo = $req->input('vehiculo_id');
-            $idsLotes = $req->input('idsLotes');
-        
-            $count = VehiculoTransporta::where('vehiculo_id', $idVehiculo)
-                ->whereIn('lote_id', $idsLotes)
-                ->count();
-        
-            if ($count !== count($idsLotes)) {
-                $validator->errors()->add('idsLotes', 'Los IDs de lotes y vehiculo_id no coinciden en la tabla VehiculoTransporta.');
-            }
-        });
-
-        if($validaciones->fails())
-            return response($validaciones->errors(), 400);
-
-        $viaje = new Viaje;
-        $viaje -> Ruta() -> associate($req -> input("ruta_id"));
-        $viaje -> save();
-        $idsLotes = $req -> input("idsLotes", []);
-
-        foreach ($idsLotes as $idLote) {
-            $viaje -> ViajeAsignado() -> create([
-                "viaje_id"    => $viaje -> id,
-                "vehiculo_id" => $req   -> input("vehiculo_id"),
-                "lote_id"     => $idLote
-            ]);
+    private function ModificarVehiculoTransporta($transporta) {
+        foreach($transporta as $vehiculoTransporta) {
+            $vehiculoTransporta->estado_viaje = "En curso";
+            $vehiculoTransporta->save();
         }
+    }
 
-        $viaje -> ViajeAsignado;
-        return $viaje;
+    private function FechaSalidaViaje($viaje) {
+        $viaje->salida = Carbon::now('America/Montevideo')->format('Y-m-d H:i:s');
+        $viaje->save();
+    }
 
+    public function ListarViaje(Request $req) {
+        $usuario_id = $req->attributes->get("user_id");
+        $transportista = $req->attributes->get("transportista_id");
+
+        
     }
 }
