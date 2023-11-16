@@ -18,6 +18,6 @@ class Transportista extends Model
     }
 
     public function Vehiculo() {
-        return $this -> belongsTo(User::class);
+        return $this -> belongsTo(Vehiculo::class);
     }
 }

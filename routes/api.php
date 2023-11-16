@@ -2,6 +2,7 @@
 
 
 use App\Http\Controllers\UsuarioController;
+use App\Http\Controllers\ViajeController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -27,6 +28,12 @@ Route::controller(ProductoController::class) -> group(function () {
 Route::group(["middleware" => ["validarApiToken", "transportista"]], function () {
     Route::controller(UsuarioController::class) -> group(function () {
         Route::get("/usuario/token", "ListarUsuario");
+    });
+    
+    Route::controller(ViajeController::class) -> group(function () {
+        Route::get("/vehiculo/asignado", "VehiculoAsignado");
+        Route::get("/viaje/asignado", "ViajeAsignado");
+        Route::get("/viaje/iniciar", "IniciarViaje");
     });
 });
 

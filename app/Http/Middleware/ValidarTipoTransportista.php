@@ -21,6 +21,7 @@ class ValidarTipoTransportista
         $transportista = Transportista::where("user_id", $userId)->first();
     
         if ($transportista) {
+            $request->attributes->add(["transportista_id" => $transportista["id"]]);
             return $next($request);
         }
     
